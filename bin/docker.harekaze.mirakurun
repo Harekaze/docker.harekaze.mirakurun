@@ -38,12 +38,20 @@ function start() {
   docker run --name="$name" \
     --rm \
     --network=bridge \
+    --cap-add=SYS_ADMIN \
+    --cap-add=SYS_NICE \
+    --device /dev/bus:/dev/bus \
+    --device /dev/dvb:/dev/dvb \
     -e TZ="$TIMEZONE" \
     -v "$SETTING_CONFIG_DIR":/app-config \
     -v "$ADDON_HOME/data":/app-data \
     -v "$ADDON_HOME/run":/app/run \
     -v "$ADDON_HOME/opt":/app/opt \
     -p "$SETTING_SERVICE_PORT":40772 \
+    -p 9229:9229 \
+    --log-driver=json-file \
+    --log-opt max-file=1 \
+    --log-opt max-size=10m \
     "$DOCKER_IMAGE":"$IMAGE_VERSION"
 }
 
