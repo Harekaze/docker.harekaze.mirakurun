@@ -1,10 +1,10 @@
 #!/bin/sh
 # Copyright (C) 2020 Yuki MIZUNO
-# https://github.com/Harekaze/docker.harekaze.alpine/
+# https://github.com/Harekaze/docker.harekaze.mirakurun/
 # SPDX-License-Identifier: GPL-3.0-only
 
-DOCKER_IMAGE="alpine"
-IMAGE_VERSION="3.11.6"
+DOCKER_IMAGE="chinachu/mirakurun"
+IMAGE_VERSION="3.3.0"
 
 name="$(basename $0)"
 . /etc/profile
@@ -37,10 +37,9 @@ function start() {
     --rm \
     --network=bridge \
     -e TZ="$TIMEZONE" \
-    -v "$SETTING_CONFIG_DIR":/config \
-    -p "$SETTING_SERVICE_PORT":1234 \
-    "$DOCKER_IMAGE":"$IMAGE_VERSION" \
-    nc -lk -p 1234 -e grep item /config/sample.yml
+    -v "$SETTING_CONFIG_DIR":/app-config/ \
+    -p "$SETTING_SERVICE_PORT":40772 \
+    "$DOCKER_IMAGE":"$IMAGE_VERSION"
 }
 
 function stop() {
