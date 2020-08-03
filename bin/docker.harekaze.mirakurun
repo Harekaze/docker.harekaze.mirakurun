@@ -20,7 +20,9 @@ fi
 oe_setup_addon "$name"
 
 function setup() {
-  cp -r -u $ADDON_DIR/config $SETTING_CONFIG_DIR
+  mkdir -p $ADDON_HOME/data
+  mkdir -p $ADDON_HOME/run
+  mkdir -p $ADDON_HOME/opt
 }
 
 function update() {
@@ -37,7 +39,10 @@ function start() {
     --rm \
     --network=bridge \
     -e TZ="$TIMEZONE" \
-    -v "$SETTING_CONFIG_DIR":/app-config/ \
+    -v "$SETTING_CONFIG_DIR":/app-config \
+    -v "$ADDON_HOME/data":/app-data \
+    -v "$ADDON_HOME/run":/app/run \
+    -v "$ADDON_HOME/opt":/app/opt \
     -p "$SETTING_SERVICE_PORT":40772 \
     "$DOCKER_IMAGE":"$IMAGE_VERSION"
 }
