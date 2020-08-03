@@ -1,0 +1,14 @@
+msgid ""
+msgstr ""
+
+msgctxt "#30000"
+msgid "Configuration"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Config file directory"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Service TCP port"
+msgstr ""

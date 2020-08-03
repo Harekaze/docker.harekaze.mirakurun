@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="30000">
+		<setting label="30001" type="folder" id="SETTING_CONFIG_DIR" default="/storage/.config/template" option="writeable" />
+		<setting label="30002" type="number" id="SETTING_SERVICE_PORT" default="80" />
+	</category>
+</settings>

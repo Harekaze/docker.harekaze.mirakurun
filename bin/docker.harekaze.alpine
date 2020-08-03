@@ -1,0 +1,71 @@
+#!/bin/sh
+# Copyright (C) 2020 Yuki MIZUNO
+# https://github.com/Harekaze/docker.harekaze.alpine/
+# SPDX-License-Identifier: GPL-3.0-only
+
+DOCKER_IMAGE="alpine"
+IMAGE_VERSION="3.11.6"
+
+name="$(basename $0)"
+. /etc/profile
+
+# https://github.com/LibreELEC/LibreELEC.tv/blob/9.2.3/packages/mediacenter/kodi/patches/kodi-100.08-setup-timezone.patch
+if [ -f /storage/.cache/timezone ]; then
+  . /storage/.cache/timezone
+else
+  TIMEZONE="Asia/Tokyo"
+fi
+
+# https://github.com/LibreELEC/LibreELEC.tv/blob/9.2.3/packages/mediacenter/kodi/profile.d/00-addons.conf
+oe_setup_addon "$name"
+
+function setup() {
+  cp -r -u $ADDON_DIR/config $SETTING_CONFIG_DIR
+}
+
+function update() {
+  docker pull "$DOCKER_IMAGE":"$IMAGE_VERSION"
+  docker rmi $(docker image ls "$DOCKER_IMAGE" -f before="$DOCKER_IMAGE":"$IMAGE_VERSION" -q)
+  docker image prune -f 2> /dev/null
+}
+
+function start() {
+  setup
+  update
+  docker rm "$name" 2>/dev/null
+  docker run --name="$name" \
+    --rm \
+    --network=bridge \
+    -e TZ="$TIMEZONE" \
+    -v "$SETTING_CONFIG_DIR":/config \
+    -p "$SETTING_SERVICE_PORT":1234 \
+    "$DOCKER_IMAGE":"$IMAGE_VERSION" \
+    nc -lk -p 1234 -e grep item /config/sample.yml
+}
+
+function stop() {
+  docker stop "$name"
+}
+
+function status() {
+  test x$(docker ps --filter name="$name" -q) != "x"
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  status)
+    status
+    ;;
+  restart)
+    stop
+    start
+    ;;
+  *)
+    echo $"Usage: $0 {start|stop|restart|status}"
+    exit 1
+esac

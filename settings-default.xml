@@ -1,0 +1,4 @@
+<settings>
+	<setting id="SETTING_CONFIG_DIR" value="/storage/.config/alpine" />
+	<setting id="SETTING_SERVICE_PORT" value="80" />
+</settings>
