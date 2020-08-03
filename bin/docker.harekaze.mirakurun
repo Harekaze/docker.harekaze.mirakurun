@@ -26,8 +26,11 @@ function setup() {
 }
 
 function update() {
-  docker pull "$DOCKER_IMAGE":"$IMAGE_VERSION"
-  docker rmi $(docker image ls "$DOCKER_IMAGE" -f before="$DOCKER_IMAGE":"$IMAGE_VERSION" -q)
+  if [ x$(docker image ls "$DOCKER_IMAGE":"$IMAGE_VERSION" -q) == x ]
+  then
+    docker pull "$DOCKER_IMAGE":"$IMAGE_VERSION"
+    docker rmi $(docker image ls "$DOCKER_IMAGE" -f before="$DOCKER_IMAGE":"$IMAGE_VERSION" -q)
+  fi
   docker image prune -f 2> /dev/null
 }
 
