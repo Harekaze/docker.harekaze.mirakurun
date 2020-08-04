@@ -40,6 +40,10 @@ function update() {
 function start() {
   setup
   update
+  if [ $SETTING_EXPOSE_PORT == "true" ]
+  then
+    EXPOSE_PORTS="-p 40772:40772 -p 9229:9229"
+  fi
   docker rm "$name" 2>/dev/null
   docker run --name="$name" \
     --rm \
@@ -53,8 +57,7 @@ function start() {
     -v "$ADDON_HOME/data":/app-data \
     -v "$ADDON_HOME/run":/app/run \
     -v "$ADDON_HOME/opt":/app/opt \
-    -p 40772:40772 \
-    -p 9229:9229 \
+    $EXPOSE_PORTS \
     --log-driver=json-file \
     --log-opt max-file=1 \
     --log-opt max-size=10m \

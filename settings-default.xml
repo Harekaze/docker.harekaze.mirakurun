@@ -1,2 +1,3 @@
 <settings>
+	<setting id="SETTING_EXPOSE_PORT" value="true" />
 </settings>
