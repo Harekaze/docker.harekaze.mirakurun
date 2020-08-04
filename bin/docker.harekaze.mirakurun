@@ -19,7 +19,10 @@ fi
 # https://github.com/LibreELEC/LibreELEC.tv/blob/9.2.3/packages/mediacenter/kodi/profile.d/00-addons.conf
 oe_setup_addon "$name"
 
+CONFIG_DIR=/storage/.config/mirakurun/
+
 function setup() {
+  mkdir -p $CONFIG_DIR/
   mkdir -p $ADDON_HOME/data
   mkdir -p $ADDON_HOME/run
   mkdir -p $ADDON_HOME/opt
@@ -46,11 +49,11 @@ function start() {
     --device /dev/bus:/dev/bus \
     --device /dev/dvb:/dev/dvb \
     -e TZ="$TIMEZONE" \
-    -v "$SETTING_CONFIG_DIR":/app-config \
+    -v "$CONFIG_DIR":/app-config \
     -v "$ADDON_HOME/data":/app-data \
     -v "$ADDON_HOME/run":/app/run \
     -v "$ADDON_HOME/opt":/app/opt \
-    -p "$SETTING_SERVICE_PORT":40772 \
+    -p 40772:40772 \
     -p 9229:9229 \
     --log-driver=json-file \
     --log-opt max-file=1 \
