@@ -31,6 +31,7 @@ function setup() {
 function update() {
   if [ x$(docker image ls "$DOCKER_IMAGE":"$IMAGE_VERSION" -q) == x ]
   then
+    kodi-send --action="Notification($name, Updating docker image)"
     docker pull "$DOCKER_IMAGE":"$IMAGE_VERSION"
     docker rmi $(docker image ls "$DOCKER_IMAGE" -f before="$DOCKER_IMAGE":"$IMAGE_VERSION" -q)
   fi
