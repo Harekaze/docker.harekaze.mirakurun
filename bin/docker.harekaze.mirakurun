@@ -56,8 +56,8 @@ function start() {
     -e TZ="$TIMEZONE" \
     -v "$CONFIG_DIR":/app-config \
     -v "$ADDON_HOME/data":/app-data \
-    -v "$ADDON_HOME/run":/app/run \
-    -v "$ADDON_HOME/opt":/app/opt \
+    -v "$ADDON_HOME/run":/var/run \
+    -v "$ADDON_HOME/opt":/opt \
     $EXPOSE_PORTS \
     --log-driver=json-file \
     --log-opt max-file=1 \
